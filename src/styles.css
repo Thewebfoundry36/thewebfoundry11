@@ -191,7 +191,7 @@
 }
 
 @utility glass-card {
-  background: color-mix(in oklab, white 72%, transparent);
+  background: color-mix(in oklab, white 86%, transparent);
   backdrop-filter: blur(18px) saturate(150%);
   border: 1px solid color-mix(in oklab, white 60%, transparent);
   box-shadow: var(--shadow-lift);
