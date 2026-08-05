@@ -5,7 +5,7 @@ export function Footer() {
   return (
     <footer className="border-t border-gold/12 bg-[#0D0D0D]">
       <div className="shell flex flex-col items-center gap-8 py-16 text-center">
-        <img src={logo.url} alt={`${BRAND.name} logo`} className="h-14 w-14 object-contain" width={56} height={56} loading="lazy" />
+        <img src={logo.url} alt={`${BRAND.name} logo`} className="h-24 w-auto object-contain" width={143} height={96} loading="lazy" />
         <div>
           <p className="font-display text-2xl tracking-[0.22em] uppercase text-white/90">{BRAND.name}</p>
           <p className="eyebrow mt-3">{BRAND.tagline}</p>

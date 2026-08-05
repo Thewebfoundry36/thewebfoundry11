@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/web-foundry-logo.png.asset.json";
+import logo from "@/assets/web-foundry-mark.png.asset.json";
 import { NAV_LINKS, BRAND } from "@/data/foundry";
 
 export function Navbar() {
@@ -24,7 +24,7 @@ export function Navbar() {
     >
       <nav className="shell flex items-center justify-between py-4" aria-label="Primary">
         <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <img src={logo.url} alt={`${BRAND.name} monogram`} className="h-9 w-9 object-contain" width={36} height={36} />
+          <img src={logo.url} alt={`${BRAND.name} monogram`} className="h-8 w-auto object-contain" width={32} height={32} />
           <span className="font-display text-lg tracking-[0.24em] text-white/90 uppercase">Web Foundry</span>
         </Link>
 

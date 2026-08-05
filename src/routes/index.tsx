@@ -82,9 +82,9 @@ function HomePage() {
           <motion.img
             src={logo.url}
             alt={`${BRAND.name} — ${BRAND.tagline}`}
-            width={260}
-            height={173}
-            className="mx-auto w-44 object-contain sm:w-56 md:w-64"
+            width={445}
+            height={300}
+            className="mx-auto w-64 object-contain sm:w-80 md:w-[26rem]"
             initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
