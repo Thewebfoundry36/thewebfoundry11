@@ -13,7 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
-import { FloatingActions, ScrollProgress } from "@/components/site/FloatingActions";
+import { Ambience } from "@/components/site/Ambience";
 
 function NotFoundComponent() {
   return (
@@ -80,15 +80,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Mom's Smile Dental & Cosmetic Clinic | Kalavakkam, OMR" },
+      { title: "The Web Foundry | Crafting Digital Excellence" },
       {
         name: "description",
         content:
-          "Advanced dental and cosmetic treatments in Kalavakkam, Chennai. Implants, root canals, smile makeovers and pain-free family dentistry.",
+          "The Web Foundry crafts premium AI-powered websites for luxury brands and ambitious businesses.",
       },
-      { name: "author", content: "Mom's Smile Dental & Cosmetic Clinic" },
-      { name: "theme-color", content: "#0A3D62" },
-      { property: "og:site_name", content: "Mom's Smile Dental & Cosmetic Clinic" },
+      { name: "author", content: "The Web Foundry" },
+      { name: "theme-color", content: "#050505" },
+      { property: "og:site_name", content: "The Web Foundry" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "en_IN" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -98,13 +98,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap",
       },
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
     ],
   }),
   shellComponent: RootShell,
@@ -132,14 +132,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ScrollProgress />
+      <Ambience />
       <Navbar />
-      <main id="main">
+      <main id="main" className="relative z-10">
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
       </main>
       <Footer />
-      <FloatingActions />
     </QueryClientProvider>
   );
 }
