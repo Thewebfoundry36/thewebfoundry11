@@ -15,7 +15,7 @@ export const HERO_STATS = [
   { value: "100%", label: "Custom Designed" },
   { value: "AI", label: "Powered Development" },
   { value: "SEO", label: "Optimised From Day One" },
-  { value: "<1s", label: "Lightning Fast" },
+  { value: "Swift", label: "Lightning Fast Delivery" },
   { value: "Mobile", label: "First By Default" },
   { value: "Premium", label: "End To End Experience" },
 ];
