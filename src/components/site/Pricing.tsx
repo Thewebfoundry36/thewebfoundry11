@@ -4,9 +4,9 @@ import { GoldButton } from "./GoldButton";
 
 export function Pricing() {
   return (
-    <div className="mt-20 grid items-center gap-8 lg:grid-cols-3">
+    <div className="mt-20 grid items-stretch gap-8 lg:grid-cols-3">
       {PACKAGES.map((pkg, i) => (
-        <Reveal key={pkg.name} delay={i * 0.1} className={pkg.featured ? "lg:-my-8 lg:z-10" : ""}>
+        <Reveal key={pkg.name} delay={i * 0.1} className={`h-full ${pkg.featured ? "lg:-my-8 lg:z-10" : ""}`}>
           <article
             className={`glass-card glass-card-hover relative flex h-full flex-col p-8 sm:p-10 ${
               pkg.featured
