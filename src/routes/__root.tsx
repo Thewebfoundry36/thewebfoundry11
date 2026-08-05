@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "The Web Foundry crafts premium AI-powered websites for luxury brands and ambitious businesses.",
+          "The Web Foundry crafts premium  websites for luxury brands and ambitious businesses.",
       },
       { name: "author", content: "The Web Foundry" },
       { name: "theme-color", content: "#050505" },
@@ -92,6 +92,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "en_IN" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "The Web Foundry | Crafting Digital Excellence" },
+      { name: "twitter:title", content: "The Web Foundry | Crafting Digital Excellence" },
+      { property: "og:description", content: "The Web Foundry crafts premium  websites for luxury brands and ambitious businesses." },
+      { name: "twitter:description", content: "The Web Foundry crafts premium  websites for luxury brands and ambitious businesses." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0e80ac8d-7b5e-4daf-9160-6909313d1a86/id-preview-5227eb57--cd1fca8e-5f76-4c57-9147-16359491f551.lovable.app-1785920716631.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0e80ac8d-7b5e-4daf-9160-6909313d1a86/id-preview-5227eb57--cd1fca8e-5f76-4c57-9147-16359491f551.lovable.app-1785920716631.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
