@@ -1,537 +1,395 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "motion/react";
-import {
-  ArrowRight,
-  CalendarCheck,
-  CheckCircle2,
-  Phone,
-  ShieldCheck,
-  Sparkles,
-  Star,
-} from "lucide-react";
 import { useRef } from "react";
+import logo from "@/assets/web-foundry-logo.png.asset.json";
 import { Reveal } from "@/components/site/Reveal";
 import { SectionHeading } from "@/components/site/SectionHeading";
-import { ServiceCard } from "@/components/site/ServiceCard";
-import { Testimonials } from "@/components/site/Testimonials";
-import { Counter } from "@/components/site/Counter";
+import { GoldButton } from "@/components/site/GoldButton";
+import { Pricing } from "@/components/site/Pricing";
+import { Faq } from "@/components/site/Faq";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { CLINIC, FAQS, JOURNEY, SERVICES, TRUST_POINTS, WHY_US } from "@/data/clinic";
-import heroClinic from "@/assets/hero-clinic.jpg";
-import smilePortrait from "@/assets/smile-portrait.jpg";
-import galleryWhitening from "@/assets/gallery-whitening.jpg";
-import galleryTreatment from "@/assets/gallery-treatment.jpg";
-import galleryBraces from "@/assets/gallery-braces.jpg";
-import galleryEquipment from "@/assets/gallery-equipment.jpg";
+  BRAND,
+  COMPARISON,
+  FAQS,
+  HERO_STATS,
+  PILLARS,
+  PORTFOLIO,
+  PROCESS,
+  SERVICES,
+  TESTIMONIALS,
+} from "@/data/foundry";
 
-const TITLE = "Mom's Smile Dental & Cosmetic Clinic | Dentist in Kalavakkam, OMR";
-const DESC =
-  "Premium dental & cosmetic care in Kalavakkam, Chennai. Implants, single-sitting root canals, smile makeovers, aligners and pain-free family dentistry. Rated 4.8★.";
+const SITE = "https://momssmile-clinic-pro.lovable.app";
+const TITLE = "The Web Foundry | Premium AI Web Design Agency";
+const DESCRIPTION =
+  "The Web Foundry crafts premium AI-powered websites for luxury brands and ambitious businesses — timeless design, intelligent technology, measurable growth.";
 
 export const Route = createFileRoute("/")({
+  component: HomePage,
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { property: "og:description", content: DESCRIPTION },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE + "/" },
       { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESC },
+      { name: "twitter:description", content: DESCRIPTION },
+    ],
+    links: [{ rel: "canonical", href: SITE + "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          name: BRAND.name,
+          slogan: BRAND.tagline,
+          description: DESCRIPTION,
+          url: SITE,
+          areaServed: "IN",
+          serviceType: SERVICES.map((s) => s.title),
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
     ],
   }),
-  component: Index,
 });
 
-const FLOATING = ["Dental Implants", "Root Canal", "Smile Makeover", "Teeth Whitening"];
-
-const localBusinessSchema = {
-  "@context": "https://schema.org",
-  "@type": "Dentist",
-  name: CLINIC.name,
-  description: DESC,
-  telephone: CLINIC.phoneDisplay,
-  email: CLINIC.email,
-  priceRange: "₹₹",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: CLINIC.addressLine1,
-    addressLocality: "Kalavakkam, Chennai",
-    addressRegion: "Tamil Nadu",
-    postalCode: "603110",
-    addressCountry: "IN",
-  },
-  geo: { "@type": "GeoCoordinates", latitude: 12.7862, longitude: 80.2205 },
-  openingHours: ["Mo-Fr 09:30-21:00", "Sa 09:30-20:00", "Su 10:00-14:00"],
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: CLINIC.rating,
-    reviewCount: CLINIC.reviews,
-  },
-  medicalSpecialty: "Dentistry",
-};
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQS.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
-
-function Index() {
-  const heroRef = useRef<HTMLElement>(null);
+function HomePage() {
+  const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-
+    <div id="top" className="relative">
       {/* HERO */}
-      <section ref={heroRef} className="relative isolate min-h-[100svh] overflow-hidden">
-        <motion.img
-          src={heroClinic}
-          alt="Modern treatment room at Mom's Smile Dental & Cosmetic Clinic in Kalavakkam"
-          width={1600}
-          height={1104}
-          fetchPriority="high"
-          style={{ y: imgY }}
-          className="absolute inset-0 -z-20 size-full scale-110 object-cover"
-        />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(105deg,oklch(0.29_0.063_246/0.94)_0%,oklch(0.29_0.063_246/0.82)_45%,oklch(0.29_0.063_246/0.45)_100%)]" />
+      <section ref={heroRef} className="relative flex min-h-[100svh] items-center overflow-hidden pt-32 pb-24">
+        <motion.div style={{ y, opacity }} className="shell relative z-10 text-center">
+          <motion.img
+            src={logo.url}
+            alt={`${BRAND.name} — ${BRAND.tagline}`}
+            width={260}
+            height={173}
+            className="mx-auto w-44 object-contain sm:w-56 md:w-64"
+            initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+          />
 
-        <motion.div
-          style={{ opacity: fade }}
-          className="mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center px-5 pt-28 pb-24 lg:px-8"
-        >
-          <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
-            <div>
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold tracking-[0.16em] text-white/85 uppercase backdrop-blur-md"
-              >
-                <Sparkles className="size-3.5 text-emerald-light" />
-                Kalavakkam · OMR, Chennai
-              </motion.span>
+          <motion.h1
+            className="mx-auto mt-10 max-w-4xl text-balance font-display text-5xl leading-[1.05] text-white sm:text-6xl md:text-7xl lg:text-[5.25rem]"
+            initial={{ opacity: 0, y: 26 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.4, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Websites That <span className="text-gold">Command Attention.</span>
+          </motion.h1>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 26 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.08 }}
-                className="mt-6 text-4xl leading-[1.08] text-white sm:text-5xl lg:text-6xl xl:text-7xl"
-              >
-                Your Smile Deserves <span className="text-gradient">the Best Care</span>
-              </motion.h1>
+          <motion.p
+            className="mx-auto mt-9 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            We craft premium AI-powered websites that elevate businesses, establish authority and convert visitors
+            into customers through timeless design and intelligent technology.
+          </motion.p>
 
-              <motion.p
-                initial={{ opacity: 0, y: 26 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.16 }}
-                className="mt-6 max-w-xl text-base leading-relaxed text-white/75 sm:text-lg"
-              >
-                Providing advanced dental and cosmetic treatments in Kalavakkam with modern
-                technology, experienced dentists, and personalized patient care.
-              </motion.p>
+          <motion.div
+            className="mt-14 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.4, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <GoldButton href="#pricing">View Packages</GoldButton>
+            <GoldButton href="#process" variant="ghost">
+              Our Process
+            </GoldButton>
+          </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 26 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.24 }}
-                className="mt-9 flex flex-wrap gap-3"
-              >
-                <Link
-                  to="/contact"
-                  hash="book"
-                  className="inline-flex items-center gap-2 rounded-2xl gradient-emerald px-7 py-4 text-base font-semibold text-white shadow-glow transition-transform hover:scale-[1.03]"
-                >
-                  <CalendarCheck className="size-5" /> Book Appointment
-                </Link>
-                <a
-                  href={`tel:${CLINIC.phone}`}
-                  className="inline-flex items-center gap-2 rounded-2xl border border-white/25 bg-white/10 px-7 py-4 text-base font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/20"
-                >
-                  <Phone className="size-5" /> Call Now
-                </a>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 26 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.32 }}
-                className="mt-10 inline-flex flex-wrap items-center gap-x-6 gap-y-3 rounded-3xl border border-white/15 bg-white/8 px-6 py-4 backdrop-blur-md"
-              >
-                <span className="flex items-center gap-2">
-                  <span className="flex text-gold" aria-hidden="true">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="size-4 fill-current" />
-                    ))}
-                  </span>
-                  <span className="text-sm font-semibold text-white">
-                    {CLINIC.rating} Google Rating
-                  </span>
-                </span>
-                <span className="h-6 w-px bg-white/20" />
-                <span className="text-sm font-medium text-white/75">
-                  {CLINIC.reviews}+ Happy Reviews
-                </span>
-              </motion.div>
-            </div>
-
-            <div className="relative hidden lg:block">
-              <div className="relative mx-auto aspect-4/5 w-full max-w-sm overflow-hidden rounded-[2rem] border border-white/20 shadow-lift">
-                <img
-                  src={smilePortrait}
-                  alt="Patient smiling after cosmetic dental treatment"
-                  width={1008}
-                  height={1200}
-                  className="size-full object-cover"
-                />
-              </div>
-              {FLOATING.map((label, i) => (
-                <motion.div
-                  key={label}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.4 + i * 0.12 }}
-                  className={[
-                    "glass-card animate-float absolute flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold text-navy",
-                    i === 0 ? "-top-4 -left-6" : "",
-                    i === 1 ? "top-1/3 -right-8" : "",
-                    i === 2 ? "bottom-24 -left-10" : "",
-                    i === 3 ? "-bottom-4 right-0" : "",
-                  ].join(" ")}
-                  style={{ animationDelay: `${i * 0.8}s` }}
-                >
-                  <CheckCircle2 className="size-4 text-emerald" />
-                  {label}
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          <motion.ul
+            className="mx-auto mt-24 grid max-w-4xl grid-cols-2 gap-px border border-gold/12 bg-gold/12 sm:grid-cols-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.6, delay: 1 }}
+          >
+            {HERO_STATS.map((s) => (
+              <li key={s.label} className="bg-[#050505] px-6 py-8">
+                <p className="font-display text-3xl text-gold sm:text-4xl">{s.value}</p>
+                <p className="mt-3 text-[0.62rem] uppercase tracking-[0.24em] text-white/50">{s.label}</p>
+              </li>
+            ))}
+          </motion.ul>
         </motion.div>
       </section>
 
-      {/* TRUST BAR */}
-      <section className="border-y border-border bg-secondary/60">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-5 px-5 py-8 sm:grid-cols-3 lg:grid-cols-6 lg:px-8">
-          {TRUST_POINTS.map((t, i) => (
-            <Reveal key={t} delay={i * 0.05}>
-              <div className="flex items-center gap-2.5">
-                <ShieldCheck className="size-5 shrink-0 text-emerald" />
-                <span className="text-sm font-semibold text-navy">{t}</span>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
       {/* ABOUT */}
-      <section className="section-y bg-background">
-        <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 lg:grid-cols-2 lg:px-8">
-          <Reveal className="relative">
-            <div className="overflow-hidden rounded-[2rem] shadow-lift">
-              <img
-                src={galleryTreatment}
-                alt="Dentist treating a relaxed patient at the clinic"
-                loading="lazy"
-                width={1200}
-                height={1500}
-                className="aspect-4/5 w-full object-cover"
-              />
-            </div>
-            <div className="glass-card absolute -right-2 -bottom-8 hidden rounded-3xl px-6 py-5 sm:block">
-              <p className="font-display text-3xl font-semibold text-navy">16+</p>
-              <p className="text-sm text-muted-foreground">Years of clinical experience</p>
-            </div>
-          </Reveal>
+      <section className="section-y relative bg-[#0D0D0D]">
+        <div className="shell">
+          <SectionHeading
+            eyebrow="The Foundry"
+            title={
+              <>
+                Crafted With Precision.
+                <br />
+                <span className="text-gold">Built For Growth.</span>
+              </>
+            }
+            subtitle="The Web Foundry combines AI technology with premium design principles to build websites that do not simply look beautiful — they generate trust, establish credibility and drive measurable business growth. Every decision, from the weight of a heading to the pace of an animation, is made in service of how your brand is perceived."
+          />
 
-          <div>
-            <SectionHeading
-              align="left"
-              eyebrow="About the clinic"
-              title="Dentistry that puts the patient first — always"
-              subtitle="Mom's Smile was founded on a simple idea: people deserve honest advice, gentle hands and a clinic that feels calm rather than clinical. Every treatment plan starts with listening."
-            />
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {[
-                ["Patient-first care", "Your comfort and consent guide every decision we make."],
-                ["Latest technology", "Digital imaging, rotary endodontics and 3D smile planning."],
-                ["Comfortable experience", "Quiet operatories designed to ease dental anxiety."],
-                ["Ethical treatment", "We recommend only what is genuinely needed — in writing."],
-                ["Family dentistry", "One trusted clinic for toddlers, parents and grandparents."],
-                ["Cosmetic dentistry", "Veneers, whitening and makeovers designed around your face."],
-              ].map(([title, body], i) => (
-                <Reveal key={title} delay={i * 0.06}>
-                  <div className="surface-card h-full p-5">
-                    <p className="flex items-center gap-2 font-semibold text-navy">
-                      <CheckCircle2 className="size-4 text-emerald" />
-                      {title}
-                    </p>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-            <Link
-              to="/about"
-              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-emerald"
-            >
-              Read our story <ArrowRight className="size-4" />
-            </Link>
+          <div className="mt-20 grid gap-px border border-gold/12 bg-gold/12 sm:grid-cols-2 lg:grid-cols-3">
+            {PILLARS.map((p, i) => (
+              <Reveal key={p.title} delay={i * 0.06}>
+                <article className="group h-full bg-[#101010] p-10 transition-colors duration-700 hover:bg-[#141414]">
+                  <p className="font-display text-2xl text-white transition-colors duration-700 group-hover:text-gold">
+                    {p.title}
+                  </p>
+                  <div className="rule-gold mt-5 h-px w-12 transition-all duration-700 group-hover:w-24" aria-hidden="true" />
+                  <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
+                </article>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
       {/* SERVICES */}
-      <section id="services" className="section-y bg-secondary/50">
-        <div className="mx-auto max-w-7xl px-5 lg:px-8">
+      <section id="services" className="section-y relative scroll-mt-24">
+        <div className="shell">
           <SectionHeading
-            eyebrow="Our treatments"
-            title="Complete dental care under one roof"
-            subtitle="From a routine cleaning to a full smile transformation — delivered by specialists using equipment you would expect from a city-centre practice."
+            eyebrow="Services"
+            title="Everything Required To Present Your Brand Properly."
+            subtitle="A complete studio offering — from flagship brand websites to the integrations, optimisation and ongoing care that keep them performing."
           />
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {SERVICES.slice(0, 9).map((s, i) => (
-              <Reveal key={s.slug} delay={(i % 3) * 0.08}>
-                <ServiceCard service={s} />
+
+          <div className="mt-20 grid gap-px border border-gold/12 bg-gold/12 sm:grid-cols-2 lg:grid-cols-3">
+            {SERVICES.map((s, i) => (
+              <Reveal key={s.title} delay={(i % 3) * 0.06}>
+                <article className="group relative h-full overflow-hidden bg-[#0A0A0A] p-9 transition-colors duration-700 hover:bg-[#111111]">
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-x-0 top-0 h-px scale-x-0 rule-gold transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"
+                  />
+                  <p className="text-[0.6rem] tracking-[0.3em] text-gold/60">
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className="mt-5 font-display text-2xl leading-snug text-white transition-colors duration-700 group-hover:text-gold">
+                    {s.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+                </article>
               </Reveal>
             ))}
           </div>
-          <Reveal className="mt-12 text-center">
-            <Link
-              to="/services"
-              className="inline-flex items-center gap-2 rounded-2xl bg-navy px-7 py-4 text-base font-semibold text-white shadow-lift transition-transform hover:scale-[1.02]"
-            >
-              View all 14 treatments <ArrowRight className="size-5" />
-            </Link>
+        </div>
+      </section>
+
+      {/* WHY CHOOSE US */}
+      <section className="section-y bg-[#0D0D0D]">
+        <div className="shell">
+          <SectionHeading
+            eyebrow="Why Choose Us"
+            title="The Difference Is In The Standard."
+            subtitle="A candid comparison between how we work and how the typical website agency works."
+          />
+
+          <Reveal delay={0.1}>
+            <div className="mx-auto mt-20 max-w-4xl overflow-x-auto">
+              <table className="w-full border-collapse text-left">
+                <caption className="sr-only">The Web Foundry compared with typical website agencies</caption>
+                <thead>
+                  <tr className="border-b border-gold/25">
+                    <th scope="col" className="py-6 pr-4 text-[0.62rem] uppercase tracking-[0.26em] font-normal text-white/45">
+                      Standard
+                    </th>
+                    <th scope="col" className="px-4 py-6 text-center font-display text-lg tracking-[0.14em] text-gold uppercase">
+                      The Web Foundry
+                    </th>
+                    <th scope="col" className="px-4 py-6 text-center text-[0.62rem] uppercase tracking-[0.26em] font-normal text-white/45">
+                      Typical Agencies
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {COMPARISON.map((row) => (
+                    <tr key={row} className="border-b border-gold/10 transition-colors duration-500 hover:bg-white/[0.02]">
+                      <th scope="row" className="py-5 pr-4 text-sm font-normal text-white/85">
+                        {row}
+                      </th>
+                      <td className="px-4 py-5 text-center">
+                        <span className="font-display text-xl text-gold" aria-label="Included">
+                          ✦
+                        </span>
+                      </td>
+                      <td className="px-4 py-5 text-center text-sm text-white/30" aria-label="Rarely included">
+                        —
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </Reveal>
         </div>
       </section>
 
-      {/* WHY US */}
-      <section className="section-y gradient-navy relative overflow-hidden">
-        <div className="pointer-events-none absolute -top-32 -right-32 size-96 rounded-full bg-emerald/20 blur-3xl" />
-        <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
-          <div>
-            <SectionHeading
-              align="left"
-              invert
-              eyebrow="Why choose us"
-              title="Eight reasons families across OMR trust us"
-              subtitle="We built the clinic we would want our own family treated in — precise, transparent and genuinely kind."
-            />
-            <Reveal delay={0.15}>
-              <Link
-                to="/contact"
-                hash="book"
-                className="mt-8 inline-flex items-center gap-2 rounded-2xl gradient-emerald px-7 py-4 text-base font-semibold text-white shadow-glow"
-              >
-                <CalendarCheck className="size-5" /> Book a consultation
-              </Link>
-            </Reveal>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {WHY_US.map((w, i) => (
-              <Reveal key={w.title} delay={(i % 2) * 0.08}>
-                <div className="glass-dark h-full rounded-2xl p-6 transition-colors hover:border-emerald/40">
-                  <p className="flex items-start gap-2.5 font-semibold text-white">
-                    <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-emerald-light" />
-                    {w.title}
-                  </p>
-                  <p className="mt-2.5 pl-7.5 text-sm leading-relaxed text-white/65">{w.body}</p>
-                </div>
+      {/* PORTFOLIO */}
+      <section className="section-y">
+        <div className="shell">
+          <SectionHeading
+            eyebrow="Selected Work"
+            title="Projects Described In Detail, Not Decoration."
+            subtitle="A record of what was built, why it was built that way and what it achieved."
+          />
+
+          <div className="mt-20 grid gap-8 lg:grid-cols-2">
+            {PORTFOLIO.map((p, i) => (
+              <Reveal key={p.name} delay={(i % 2) * 0.08}>
+                <article className="glass-card glass-card-hover h-full bg-[#101010]/60 p-9 sm:p-11">
+                  <p className="eyebrow">{p.industry}</p>
+                  <h3 className="mt-5 font-display text-3xl text-white sm:text-4xl">{p.name}</h3>
+                  <div className="rule-gold mt-6 h-px w-full" aria-hidden="true" />
+                  <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{p.description}</p>
+
+                  <p className="mt-8 text-[0.62rem] uppercase tracking-[0.28em] text-white/45">Key Features</p>
+                  <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+                    {p.features.map((f) => (
+                      <li key={f} className="text-sm text-white/75">
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <dl className="mt-9 grid grid-cols-1 gap-6 border-t border-gold/12 pt-7 sm:grid-cols-2">
+                    <div>
+                      <dt className="text-[0.62rem] uppercase tracking-[0.28em] text-white/45">Completion Time</dt>
+                      <dd className="mt-2 font-display text-xl text-gold">{p.time}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-[0.62rem] uppercase tracking-[0.28em] text-white/45">Business Outcome</dt>
+                      <dd className="mt-2 text-sm leading-relaxed text-white/80">{p.outcome}</dd>
+                    </div>
+                  </dl>
+                </article>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* JOURNEY */}
-      <section className="section-y bg-background">
-        <div className="mx-auto max-w-5xl px-5 lg:px-8">
+      {/* PROCESS */}
+      <section id="process" className="section-y scroll-mt-24 bg-[#0D0D0D]">
+        <div className="shell">
           <SectionHeading
-            eyebrow="Patient journey"
-            title="Five simple steps to a healthier smile"
-            subtitle="No confusion, no surprises — you always know what happens next."
+            eyebrow="Our Process"
+            title="Eight Deliberate Stages."
+            subtitle="Nothing is improvised. Each stage is agreed before the next begins."
           />
-          <ol className="relative mt-14 space-y-6 before:absolute before:top-2 before:bottom-2 before:left-6 before:w-px before:bg-gradient-to-b before:from-emerald before:via-emerald/40 before:to-transparent sm:before:left-1/2">
-            {JOURNEY.map((step, i) => (
-              <li key={step.title} className="relative">
-                <Reveal delay={i * 0.08}>
-                  <div
-                    className={`flex items-start gap-5 sm:w-1/2 ${
-                      i % 2 === 0 ? "sm:ml-auto sm:pl-10" : "sm:flex-row-reverse sm:pr-10 sm:text-right"
-                    }`}
-                  >
-                    <span className="relative z-10 grid size-12 shrink-0 place-items-center rounded-2xl gradient-emerald font-display text-lg font-semibold text-white shadow-glow">
-                      {i + 1}
-                    </span>
-                    <div className="surface-card flex-1 p-5">
-                      <h3 className="text-lg text-navy">{step.title}</h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                        {step.body}
-                      </p>
-                    </div>
-                  </div>
-                </Reveal>
-              </li>
+
+          <ol className="relative mx-auto mt-20 max-w-3xl">
+            <span
+              aria-hidden="true"
+              className="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-gold/35 to-transparent sm:left-[9px]"
+            />
+            {PROCESS.map((p, i) => (
+              <Reveal key={p.step} delay={i * 0.05} as="li" className="relative flex gap-8 pb-14 last:pb-0">
+                <span
+                  aria-hidden="true"
+                  className="relative z-10 mt-2 h-[15px] w-[15px] shrink-0 rotate-45 border border-gold/60 bg-[#0D0D0D] sm:h-[19px] sm:w-[19px]"
+                />
+                <div className="-mt-1">
+                  <p className="text-[0.6rem] tracking-[0.3em] text-gold/60">{String(i + 1).padStart(2, "0")}</p>
+                  <h3 className="mt-3 font-display text-3xl text-white">{p.step}</h3>
+                  <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">{p.body}</p>
+                </div>
+              </Reveal>
             ))}
           </ol>
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section id="testimonials" className="section-y scroll-mt-24 bg-secondary/50">
-        <div className="mx-auto max-w-7xl px-5 lg:px-8">
+      {/* PRICING */}
+      <section id="pricing" className="section-y scroll-mt-24">
+        <div className="shell">
           <SectionHeading
-            eyebrow="Patient stories"
-            title="Rated 4.8★ by 53 patients on Google"
-            subtitle="Real experiences from families in Kalavakkam, Siruseri, Navalur and Thiruporur."
+            eyebrow="Investment"
+            title="Three Levels Of Craft."
+            subtitle="Pricing reflects the depth of strategy, customisation and engineering involved — not merely the number of pages delivered."
           />
-          <Testimonials />
+          <Pricing />
         </div>
       </section>
 
-      {/* GALLERY PREVIEW */}
-      <section className="section-y bg-background">
-        <div className="mx-auto max-w-7xl px-5 lg:px-8">
-          <SectionHeading
-            eyebrow="Smile gallery"
-            title="Results we are proud of"
-            subtitle="Smile makeovers, whitening, implants and orthodontics carried out at our Kalavakkam clinic."
-          />
-          <div className="mt-14 columns-2 gap-4 [column-fill:_balance] lg:columns-4">
-            {[
-              { src: smilePortrait, label: "Smile Makeovers", h: 1200, w: 1008 },
-              { src: galleryWhitening, label: "Teeth Whitening", h: 900, w: 1200 },
-              { src: galleryTreatment, label: "Dental Implants", h: 1500, w: 1200 },
-              { src: galleryBraces, label: "Braces & Aligners", h: 900, w: 1200 },
-              { src: galleryEquipment, label: "Before & After", h: 1400, w: 1200 },
-              { src: heroClinic, label: "Our Clinic", h: 1104, w: 1600 },
-            ].map((g, i) => (
-              <Reveal key={g.label} delay={(i % 4) * 0.06} className="mb-4 break-inside-avoid">
-                <figure className="group relative overflow-hidden rounded-3xl shadow-soft">
-                  <img
-                    src={g.src}
-                    alt={`${g.label} at Mom's Smile Dental & Cosmetic Clinic`}
-                    loading="lazy"
-                    width={g.w}
-                    height={g.h}
-                    className="w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 to-transparent p-4 text-sm font-semibold text-white">
-                    {g.label}
+      {/* TESTIMONIALS */}
+      <section className="section-y bg-[#0D0D0D]">
+        <div className="shell">
+          <SectionHeading eyebrow="Client Words" title="Judged By The Standard We Leave Behind." />
+
+          <div className="mt-20 grid gap-8 md:grid-cols-2">
+            {TESTIMONIALS.map((t, i) => (
+              <Reveal key={t.author + t.company} delay={(i % 2) * 0.08}>
+                <figure className="glass-card glass-card-hover h-full bg-[#101010]/55 p-10">
+                  <span aria-hidden="true" className="font-display text-5xl leading-none text-gold/45">
+                    &ldquo;
+                  </span>
+                  <blockquote className="mt-4">
+                    <p className="font-display text-xl leading-relaxed text-white/90 sm:text-2xl">{t.quote}</p>
+                  </blockquote>
+                  <figcaption className="mt-8 border-t border-gold/12 pt-6">
+                    <p className="text-sm text-gold">{t.author}</p>
+                    <p className="mt-1 text-[0.62rem] uppercase tracking-[0.26em] text-white/45">{t.company}</p>
                   </figcaption>
                 </figure>
               </Reveal>
             ))}
           </div>
-          <Reveal className="mt-10 text-center">
-            <Link
-              to="/gallery"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-emerald"
-            >
-              Explore the full gallery <ArrowRight className="size-4" />
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* STATS */}
-      <section className="border-y border-border bg-secondary/60">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-5 py-16 lg:grid-cols-4 lg:px-8">
-          {[
-            { value: 53, suffix: "+", label: "Google Reviews" },
-            { value: 1000, suffix: "+", label: "Happy Smiles" },
-            { value: 10, suffix: "+", label: "Dental Treatments" },
-            { value: 4.8, suffix: "★", label: "Average Rating", decimals: 1 },
-          ].map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.08} className="text-center">
-              <p className="font-display text-4xl font-semibold text-navy sm:text-5xl">
-                <Counter value={s.value} suffix={s.suffix} decimals={s.decimals ?? 0} />
-              </p>
-              <p className="mt-2 text-sm font-medium text-muted-foreground">{s.label}</p>
-            </Reveal>
-          ))}
         </div>
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="section-y scroll-mt-24 bg-background">
-        <div className="mx-auto max-w-3xl px-5 lg:px-8">
-          <SectionHeading
-            eyebrow="Questions"
-            title="Everything patients ask us"
-            subtitle="Still unsure about something? Call or WhatsApp us — we answer honestly, no appointment needed."
-          />
-          <Reveal className="mt-12">
-            <Accordion type="single" collapsible className="space-y-3">
-              {FAQS.map((f, i) => (
-                <AccordionItem
-                  key={f.q}
-                  value={`item-${i}`}
-                  className="surface-card overflow-hidden border-b px-5"
-                >
-                  <AccordionTrigger className="py-5 text-left font-display text-base text-navy hover:no-underline sm:text-lg">
-                    {f.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="pb-5 text-sm leading-relaxed text-muted-foreground">
-                    {f.a}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </Reveal>
+      <section id="faq" className="section-y scroll-mt-24">
+        <div className="shell">
+          <SectionHeading eyebrow="Questions" title="Considered Answers." />
+          <Faq />
         </div>
       </section>
 
       {/* CTA */}
-      <section className="section-y gradient-navy relative overflow-hidden">
-        <div className="pointer-events-none absolute -bottom-40 left-1/2 size-[36rem] -translate-x-1/2 rounded-full bg-emerald/20 blur-3xl" />
-        <div className="relative mx-auto max-w-3xl px-5 text-center lg:px-8">
+      <section id="cta" className="relative scroll-mt-24 overflow-hidden border-y border-gold/12 bg-[#0D0D0D]">
+        <div className="shell section-y relative z-10 text-center">
           <Reveal>
-            <h2 className="text-3xl leading-tight text-white sm:text-5xl">
-              Ready for Your <span className="text-gradient">Best Smile</span>?
+            <h2 className="mx-auto max-w-4xl text-balance font-display text-4xl leading-[1.1] text-white sm:text-6xl md:text-7xl">
+              Ready To Build Something <span className="text-gold">Exceptional?</span>
             </h2>
-            <p className="mx-auto mt-5 max-w-xl text-base text-white/70 sm:text-lg">
-              Same-week appointments available. Walk in for a consultation and leave with a clear,
-              written plan — no obligation.
+          </Reveal>
+          <Reveal delay={0.12}>
+            <p className="mx-auto mt-9 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Your website is often the first impression your business makes. Let&rsquo;s create one that reflects the
+              quality of your brand and helps you stand apart from the competition.
             </p>
-            <div className="mt-9 flex flex-wrap justify-center gap-3">
-              <Link
-                to="/contact"
-                hash="book"
-                className="inline-flex items-center gap-2 rounded-2xl gradient-emerald px-8 py-4 text-base font-semibold text-white shadow-glow transition-transform hover:scale-[1.03]"
-              >
-                <CalendarCheck className="size-5" /> Book Your Appointment Today
-              </Link>
-              <a
-                href={`tel:${CLINIC.phone}`}
-                className="inline-flex items-center gap-2 rounded-2xl border border-white/25 bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur-md hover:bg-white/20"
-              >
-                <Phone className="size-5" /> {CLINIC.phoneDisplay}
-              </a>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div className="mt-14 flex justify-center">
+              <GoldButton href="#pricing">Book Your Project</GoldButton>
             </div>
           </Reveal>
         </div>
       </section>
-    </>
+    </div>
   );
 }
